@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from bcrypt;
+import bcrypt from "bcrypt"
 
 const userSchema = new mongoose.Schema({
     username:{
@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
 });
 
 //set up pre-save middleware to create password
-userSchema.pre("save", async function(){
+userSchema.pre("save", async function(next){
      //'this' refers to the document we are trying to save to the database
     if(this.isNew || this.isModified("password")){
 

@@ -1,6 +1,13 @@
+import dotenv from "dotenv"
 import express from 'express'
-import User from './models/user';
+import User from './models/user.js'
 
+import jwt from 'jsonwebtoken'
+
+dotenv.config();
+
+
+import './db.js'
 
 const app = new express();
 const port = process.env.PORT || 3000
@@ -46,7 +53,7 @@ app.post("/api/users/login", async(req,res) =>{
             return res.status(400).json({message: "Incorrect email or password"})
         }
          //check the password that was entered
-        const correctPassword = await user.isCorrectPassw0rd(req.body.password);
+        const correctPassword = await user.isCorrectPassword(req.body.password);
 
         //check if the password is not correct (when hashed, it did not match the saved hashed password)
           if (!correctPassword) {
@@ -61,9 +68,12 @@ app.post("/api/users/login", async(req,res) =>{
     }
 
     //generate the token
-    const token = jwt.sign({data:payload}, secret, {expiresIn: expiration})
+    const token = jwt.sign(payload, secret, {expiresIn: expiration})
     console.log(token);
-     res.status(200).json({ token, user});
+     res.status(200).json({ 
+        token, 
+        user: payload,
+    });
 
     }catch(error){
         console.log(error);
@@ -72,7 +82,7 @@ app.post("/api/users/login", async(req,res) =>{
 });
 
 
-app.use(authMiddleware);
+//app.use(authMiddleware);
 
 //access this route once the middleware verified the token
 app.get("/", (req, res) => {
