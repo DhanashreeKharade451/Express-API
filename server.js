@@ -69,11 +69,15 @@ app.post("/api/users/login", async(req,res) =>{
         console.log(error);
     res.status(400).json({ message: "Something went wrong" });
     }
-})
+});
 
 
+app.use(authMiddleware);
 
-
+//access this route once the middleware verified the token
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 app.listen(port, () =>
 console.log(`Listening on port: http://localhost:${port}`), 
