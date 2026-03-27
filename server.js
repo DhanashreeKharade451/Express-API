@@ -34,11 +34,15 @@ try{
     }
      const user = await User.create(req.body);
      console.log(user);
-     res.status(201).json(user);
+     res.status(201).json({
+        _id: user._id,
+  username: user.username,
+  email: user.email
+     });
      
 }catch(error){
      console.log(error);
-    res.status(400).json({ message: "Something went wrong" });
+    res.status(400).json({ message: error.message });
 }
 
 });
