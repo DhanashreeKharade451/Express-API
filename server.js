@@ -3,6 +3,7 @@ import express from 'express'
 import User from './models/user.js'
 
 import jwt from 'jsonwebtoken'
+import { authMiddleware } from "./authMiddleware.js"
 
 dotenv.config();
 
@@ -82,7 +83,7 @@ app.post("/api/users/login", async(req,res) =>{
 });
 
 
-//app.use(authMiddleware);
+app.use(authMiddleware);
 
 //access this route once the middleware verified the token
 app.get("/", (req, res) => {
